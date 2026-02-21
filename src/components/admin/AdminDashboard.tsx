@@ -4,6 +4,7 @@ import { OverviewPage } from './pages/OverviewPage';
 import { OrdersPage } from './pages/OrdersPage';
 import { HistoryPage } from './pages/HistoryPage';
 import { InventoryPage } from './pages/InventoryPage';
+import { MetricsPage } from './pages/MetricsPage';
 
 /**
  * Main admin dashboard component with routing
@@ -17,6 +18,7 @@ export function AdminDashboard() {
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
+        <Route path="/metrics" element={<MetricsPage />} />
       </Routes>
     </DashboardLayout>
   );

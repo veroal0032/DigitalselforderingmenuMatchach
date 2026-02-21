@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import posthog from 'posthog-js';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { MainMenu } from './components/MainMenu';
 import { CheckoutScreen } from './components/CheckoutScreen';
@@ -7,6 +8,12 @@ import { AdminLogin } from './components/admin/AdminLogin';
 import { AdminDashboard } from './components/admin/AdminDashboard';
 import { ProtectedRoute } from './components/admin/ProtectedRoute';
 import { Language, MilkType, DrinkSize } from './lib/data';
+
+posthog.init('phc_C3JrkzRzI999YqleC4kMZ30wNAF0CMgCPKGE5MLPD1i', {
+  api_host: 'https://us.i.posthog.com',
+  capture_pageview: true,
+  autocapture: true,
+});
 
 export type AppScreen = 'welcome' | 'menu' | 'checkout';
 
@@ -34,24 +41,25 @@ export default function App() {
   });
 
   const handleSelectLanguage = (lang: Language) => {
+    posthog.capture('language_selected', { language: lang });
     setLanguage(lang);
     setScreen('menu');
   };
 
   const handleAddToCart = (productId: string, milk?: MilkType, size?: DrinkSize) => {
+    posthog.capture('product_added_to_cart', { product_id: productId, milk, size });
     setCart((prev) => {
-      // For items with milk, treat each milk+size combination as unique
       if (milk && size) {
         const existing = prev.find(
-          (item) => 
-            item.productId === productId && 
-            item.milk === milk && 
+          (item) =>
+            item.productId === productId &&
+            item.milk === milk &&
             item.size === size
         );
         if (existing) {
           return prev.map((item) =>
-            item.productId === productId && 
-            item.milk === milk && 
+            item.productId === productId &&
+            item.milk === milk &&
             item.size === size
               ? { ...item, quantity: item.quantity + 1 }
               : item
@@ -59,8 +67,7 @@ export default function App() {
         }
         return [...prev, { productId, quantity: 1, milk, size }];
       }
-      
-      // For items without milk, treat as before
+
       const existing = prev.find((item) => item.productId === productId && !item.milk);
       if (existing) {
         return prev.map((item) =>
@@ -77,11 +84,9 @@ export default function App() {
     setCart((prev) => {
       return prev
         .map((item) => {
-          // Match by productId and milk+size if provided
           const matches = milk && size
             ? item.productId === productId && item.milk === milk && item.size === size
             : item.productId === productId && !item.milk;
-            
           return matches
             ? { ...item, quantity: item.quantity + delta }
             : item;
@@ -91,6 +96,7 @@ export default function App() {
   };
 
   const handleRemoveFromCart = (productId: string, milk?: MilkType, size?: DrinkSize) => {
+    posthog.capture('product_removed_from_cart', { product_id: productId });
     setCart((prev) =>
       prev.filter((item) => {
         if (milk && size) {
@@ -102,20 +108,24 @@ export default function App() {
   };
 
   const handleCheckout = () => {
+    posthog.capture('checkout_started', { item_count: cart.length });
     setScreen('checkout');
   };
 
   const handleSetExtras = (extras: OrderExtras) => {
+    posthog.capture('extras_selected', { ...extras });
     setOrderExtras(extras);
   };
 
   const handleBackToMenu = () => {
+    posthog.capture('cart_abandoned');
     setCart([]);
     setOrderExtras({ collagen: false, ashwagandha: false, honey: false });
     setScreen('menu');
   };
 
   const handleResetToWelcome = () => {
+    posthog.capture('kiosk_reset_to_welcome');
     setCart([]);
     setOrderExtras({ collagen: false, ashwagandha: false, honey: false });
     setScreen('welcome');
@@ -124,7 +134,6 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Client Routes */}
         <Route path="/" element={
           screen === 'welcome' ? (
             <WelcomeScreen onSelectLanguage={handleSelectLanguage} />
@@ -151,7 +160,6 @@ export default function App() {
           )
         } />
 
-        {/* Admin Routes */}
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin/*"
@@ -161,8 +169,7 @@ export default function App() {
             </ProtectedRoute>
           }
         />
-        
-        {/* Catch all - redirect to home */}
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

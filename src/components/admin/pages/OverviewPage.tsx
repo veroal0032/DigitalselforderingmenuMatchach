@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
-import { ShoppingBag, Clock, DollarSign, AlertTriangle, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { ShoppingBag, Clock, DollarSign, AlertTriangle, ArrowRight, Mail, Loader2, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { StatCard } from '../ui/StatCard';
 import { StatusBadge } from '../ui/StatusBadge';
@@ -17,7 +18,34 @@ export function OverviewPage() {
   const todayOrders = getTodayOrders();
   const pendingOrders = getOrdersByStatus('pending');
   const lowStockProducts = getLowStockProducts();
+const [sendingEmail, setSendingEmail] = useState(false);
+const [emailSent, setEmailSent] = useState(false);
 
+const handleSendDailySummary = async () => {
+  setSendingEmail(true);
+  setEmailSent(false);
+  try {
+    const response = await fetch(
+      `https://dargugyxfivuedbkifnc.supabase.co/functions/v1/make-server-aaadc1d7/send-daily-summary`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRhcmd1Z3l4Zml2dWVkYmtpZm5jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAzMjI3MDMsImV4cCI6MjA4NTg5ODcwM30.3J_6kKJY1B0cYSqY6jZeKKRd-W16H9xj0H5HX6Bxhbo`,
+        },
+      }
+    );
+    if (response.ok) {
+      setEmailSent(true);
+      setTimeout(() => setEmailSent(false), 5000);
+    }
+  } catch (err) {
+    console.error('Error sending summary:', err);
+  } finally {
+    setSendingEmail(false);
+  }
+};
+  
   // Calculate today's revenue
   const revenueToday = todayOrders
     .filter((o) => o.status !== 'cancelled')
@@ -38,18 +66,41 @@ export function OverviewPage() {
   return (
     <div className="w-full max-w-7xl mx-auto">
       {/* Welcome Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-8"
-      >
-        <h1 className="text-4xl font-[Abril_Fatface] text-[#155020] mb-2">
-          Dashboard
-        </h1>
-        <p className="text-[#155020]/60 font-sans-brand">
-          Resumen de operaciones y métricas clave
-        </p>
-      </motion.div>
+ <div className="flex items-center justify-between mb-8">
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+  >
+    <h1 className="text-4xl font-[Abril_Fatface] text-[#155020] mb-2">
+      Dashboard
+    </h1>
+    <p className="text-[#155020]/60 font-sans-brand">
+      Resumen de operaciones y métricas clave
+    </p>
+  </motion.div>
+
+  <motion.button
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+    onClick={handleSendDailySummary}
+    disabled={sendingEmail}
+    className={`flex items-center gap-2 px-5 py-3 rounded-xl font-sans-brand font-semibold transition-all shadow-lg ${
+      emailSent
+        ? 'bg-green-500 text-white'
+        : 'bg-[#155020] text-white hover:bg-[#0d3a16]'
+    } disabled:opacity-50`}
+  >
+    {sendingEmail ? (
+      <><Loader2 className="w-5 h-5 animate-spin" /> Enviando...</>
+    ) : emailSent ? (
+      <><CheckCircle className="w-5 h-5" /> ¡Enviado!</>
+    ) : (
+      <><Mail className="w-5 h-5" /> Enviar Resumen del Día</>
+    )}
+  </motion.button>
+</div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
