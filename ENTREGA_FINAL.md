@@ -58,3 +58,7 @@ Que un cliente complete un pedido desde el kiosko de forma autónoma: selecciona
 - **Referral:** ocurre de forma orgánica en el local; no hay mecanismo digital para trackearlo aún.
 
 **Justificación general:** Al ser un kiosko físico en etapa temprana, priorizamos métricas de conversión dentro de la sesión (¿el cliente llega al menú? ¿completa el pedido?). Las métricas de retención y referral requieren identidad del usuario, lo cual no aplica al modelo actual.
+
+## 4. Estrategia de Distribución
+
+🔗 [Ver presentación completa](https://www.canva.com/design/DAHCFI6HRXg/oJb3X7qlYsN3SpC2Mowpww/view?utm_content=DAHCFI6HRXg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha91c99a607))
