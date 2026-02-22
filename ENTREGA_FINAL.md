@@ -61,4 +61,4 @@ Que un cliente complete un pedido desde el kiosko de forma autónoma: selecciona
 
 ## 4. Estrategia de Distribución
 
-🔗 [Ver presentación completa](https://www.canva.com/design/DAHCFI6HRXg/oJb3X7qlYsN3SpC2Mowpww/view?utm_content=DAHCFI6HRXg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha91c99a607))
+🔗 [Ver presentación completa](https://www.canva.com/design/DAHCFI6HRXg/oJb3X7qlYsN3SpC2Mowpww/view?utm_content=DAHCFI6HRXg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha91c99a607)
