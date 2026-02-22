@@ -89,3 +89,15 @@ Que un cliente complete un pedido desde el kiosko de forma autónoma: selecciona
 |----------|-------------------------|-------------------------------|
 | Los clientes están dispuestos a interactuar con la pantalla sin asistencia | El kiosko se ignora y no genera valor; habría que rediseñar el onboarding | Tasa de activación menor al 20% sostenida por más de una semana |
 | El personal puede gestionar el cobro en caja separado del pedido sin errores | Se generan confusiones entre número de orden y cobro, aumentando el tiempo de atención | Quejas recurrentes del personal sobre pedidos no encontrados en caja |
+
+## 6. Anexo: Enlaces y Evidencias
+
+- **URL del producto desplegado:** https://mask-ritzy-25054031.figma.site
+- **Repositorio:** https://github.com/veroal0032/DigitalselforderingmenuMatchach
+- **Credenciales de prueba:**
+  - Email: admin@matchacha.com
+  - Contraseña: Matcha2024!
+- **Capturas de integraciones funcionando:**
+  - Resend – email de resumen diario: ![Email Resend](https://raw.githubusercontent.com/veroal0032/DigitalselforderingmenuMatchach/main/captura-resend-email.png)
+  - PostHog – métricas AARRR en el panel admin: ![Métricas AARRR](https://raw.githubusercontent.com/veroal0032/DigitalselforderingmenuMatchach/main/captura-metricas-aarrr.png)
+- **Dashboard de métricas:** visible en el panel admin → sección "Métricas AARRR" (captura arriba)
