@@ -101,3 +101,4 @@ Que un cliente complete un pedido desde el kiosko de forma autónoma: selecciona
   - Resend – email de resumen diario: ![Email Resend](https://raw.githubusercontent.com/veroal0032/DigitalselforderingmenuMatchach/main/captura-resend-email.png)
   - PostHog – métricas AARRR en el panel admin: ![Métricas AARRR](https://raw.githubusercontent.com/veroal0032/DigitalselforderingmenuMatchach/main/captura-metricas-aarrr.png)
 - **Dashboard de métricas:** visible en el panel admin → sección "Métricas AARRR" (captura arriba)
+- **Video de funcionamiento:** [Ver demo completa](https://drive.google.com/file/d/17il3782pbz0MjHvl8oCkTwWnhQQ_1cfc/view?usp=sharing)
