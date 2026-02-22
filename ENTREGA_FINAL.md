@@ -69,23 +69,23 @@ Que un cliente complete un pedido desde el kiosko de forma autónoma: selecciona
 
 | Hack | Descripción | Riesgo que mitiga |
 |------|-------------|-------------------|
-| **Datos mockeados realistas** | Los hooks `useOrders` y `useInventory` tienen 8 pedidos y 20 productos con estados, timestamps y stocks variados precargados | Evita mostrar una app vacía en demo; permite validar el flujo completo sin base de datos conectada |
-| **Eventos de analytics como documentación viva** | Cada acción clave del usuario dispara un evento nombrado en PostHog (`language_selected`, `checkout_started`, `cart_abandoned`, etc.) | Si el flujo cambia, los eventos dejan de dispararse y se detecta inmediatamente en el dashboard |
-| **Reset automático del kiosko** | El botón de volver al inicio limpia el carrito y los extras y devuelve a la pantalla de bienvenida en un solo paso | Evita que un cliente siguiente vea el pedido del anterior en un dispositivo compartido |
+| **Suscripciones en tiempo real a Supabase** | Los hooks `useProducts`, `useOrders` e `useInventory` tienen canales de Postgres que se actualizan automáticamente ante cualquier cambio en la base de datos, sin necesidad de recargar la página | Si el admin desactiva un producto o cambia precios, el kiosko lo refleja instantáneamente; si entra un pedido nuevo, el panel lo muestra sin intervención |
+| **Eventos de analytics como documentación viva** | Cada acción clave del usuario dispara un evento nombrado en PostHog (`language_selected`, `checkout_started`, `cart_abandoned`, etc.), consumidos luego desde la API de PostHog para mostrar métricas AARRR en tiempo real en el dashboard del admin | Si el flujo cambia y los eventos dejan de dispararse, se detecta inmediatamente en el dashboard sin revisar el código |
+| **Edge Function como backend seguro** | La integración con Resend y la consulta de métricas a PostHog corren como Supabase Edge Functions en Deno, sin servidor propio | Evita exponer API keys en el frontend y permite lógica de negocio serverless sin infraestructura adicional |
 
 ### 5.2 Riesgos detectados y decisiones postergadas
 
 **Riesgos identificados:**
-- **Pedidos no persistentes:** los pedidos viven en memoria local; si se recarga la página se pierden. Plan de monitoreo: conectar Supabase en la siguiente iteración antes de usar en producción real.
-- **Sin procesamiento de pagos:** el sistema genera un número de orden pero el cobro depende de que el personal lo ejecute en caja. Si hay desconexión entre el kiosko y la caja, el pedido puede perderse.
+- **Sin procesamiento de pagos digital:** el sistema genera un número de orden pero el cobro depende del personal en caja. Si hay desconexión entre el kiosko y la caja, el pedido puede perderse sin trazabilidad. Plan de monitoreo: registrar en Supabase si el pedido fue marcado como cobrado por el admin.
+- **Un solo administrador:** actualmente el sistema tiene un único usuario admin sin roles ni permisos diferenciados. Si el local crece o hay más personal, no hay forma de limitar accesos. Plan: implementar roles en Supabase Auth cuando haya más de un operador.
 
 **Decisiones postergadas conscientemente:**
-- **Sincronización en tiempo real con Supabase:** la arquitectura está preparada pero no conectada. Se posterga hasta validar que el flujo básico funciona y vale la pena invertir en infraestructura.
-- **Sistema de autenticación por roles:** hoy hay un solo admin. La gestión multi-usuario se posterga hasta que haya más de un local operando el sistema.
+- **Procesamiento de pagos integrado:** se postergó porque el flujo de cobro en caja ya existe y funciona; agregar pagos digitales requiere integración con una pasarela y validación regulatoria que excede el alcance actual.
+- **Sistema de roles y permisos:** se postergó hasta que haya más de un local o más de un empleado usando el panel, momento en que se revisará.
 
 ### 5.3 Supuestos asumidos
 
 | Supuesto | Implicancia si es falso | Señal que nos hará revisarlo |
 |----------|-------------------------|-------------------------------|
-| Los clientes en el local están dispuestos a interactuar con una pantalla táctil sin asistencia | El kiosko se ignora y el canal no genera valor; habría que rediseñar el onboarding o agregar asistencia | Tasa de activación menor al 20% sostenida por más de una semana |
-| El personal de caja puede gestionar el flujo de cobro separado del pedido sin errores | Se generan confusiones entre número de orden y cobro real, aumentando el tiempo de atención | Quejas recurrentes del personal o clientes sobre pedidos no encontrados en caja |
+| Los clientes están dispuestos a interactuar con la pantalla sin asistencia | El kiosko se ignora y no genera valor; habría que rediseñar el onboarding | Tasa de activación menor al 20% sostenida por más de una semana |
+| El personal puede gestionar el cobro en caja separado del pedido sin errores | Se generan confusiones entre número de orden y cobro, aumentando el tiempo de atención | Quejas recurrentes del personal sobre pedidos no encontrados en caja |
