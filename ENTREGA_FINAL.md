@@ -62,3 +62,30 @@ Que un cliente complete un pedido desde el kiosko de forma autónoma: selecciona
 ## 4. Estrategia de Distribución
 
 🔗 [Ver presentación completa](https://www.canva.com/design/DAHCFI6HRXg/oJb3X7qlYsN3SpC2Mowpww/view?utm_content=DAHCFI6HRXg&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=ha91c99a607)
+
+## 5. Conciencia Técnica (Hacks y Límites del Vibe Coding)
+
+### 5.1 Hacks implementados
+
+| Hack | Descripción | Riesgo que mitiga |
+|------|-------------|-------------------|
+| **Datos mockeados realistas** | Los hooks `useOrders` y `useInventory` tienen 8 pedidos y 20 productos con estados, timestamps y stocks variados precargados | Evita mostrar una app vacía en demo; permite validar el flujo completo sin base de datos conectada |
+| **Eventos de analytics como documentación viva** | Cada acción clave del usuario dispara un evento nombrado en PostHog (`language_selected`, `checkout_started`, `cart_abandoned`, etc.) | Si el flujo cambia, los eventos dejan de dispararse y se detecta inmediatamente en el dashboard |
+| **Reset automático del kiosko** | El botón de volver al inicio limpia el carrito y los extras y devuelve a la pantalla de bienvenida en un solo paso | Evita que un cliente siguiente vea el pedido del anterior en un dispositivo compartido |
+
+### 5.2 Riesgos detectados y decisiones postergadas
+
+**Riesgos identificados:**
+- **Pedidos no persistentes:** los pedidos viven en memoria local; si se recarga la página se pierden. Plan de monitoreo: conectar Supabase en la siguiente iteración antes de usar en producción real.
+- **Sin procesamiento de pagos:** el sistema genera un número de orden pero el cobro depende de que el personal lo ejecute en caja. Si hay desconexión entre el kiosko y la caja, el pedido puede perderse.
+
+**Decisiones postergadas conscientemente:**
+- **Sincronización en tiempo real con Supabase:** la arquitectura está preparada pero no conectada. Se posterga hasta validar que el flujo básico funciona y vale la pena invertir en infraestructura.
+- **Sistema de autenticación por roles:** hoy hay un solo admin. La gestión multi-usuario se posterga hasta que haya más de un local operando el sistema.
+
+### 5.3 Supuestos asumidos
+
+| Supuesto | Implicancia si es falso | Señal que nos hará revisarlo |
+|----------|-------------------------|-------------------------------|
+| Los clientes en el local están dispuestos a interactuar con una pantalla táctil sin asistencia | El kiosko se ignora y el canal no genera valor; habría que rediseñar el onboarding o agregar asistencia | Tasa de activación menor al 20% sostenida por más de una semana |
+| El personal de caja puede gestionar el flujo de cobro separado del pedido sin errores | Se generan confusiones entre número de orden y cobro real, aumentando el tiempo de atención | Quejas recurrentes del personal o clientes sobre pedidos no encontrados en caja |
