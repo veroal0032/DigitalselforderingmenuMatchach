@@ -1,4 +1,3 @@
-[README-matchacha.md](https://github.com/user-attachments/files/26759498/README-matchacha.md)
 # Matcha Chá — Kiosko de autoservicio digital
 
 Sistema de pedidos para un café de matcha, diseñado y desarrollado de forma integral: desde la experiencia de usuario hasta la implementación con base de datos y analytics en tiempo real.
@@ -7,7 +6,7 @@ El proyecto nació como una exploración de diseño de interiores para un café 
 
 ## Demo
 
-🔗 [Ver prototipo en Figma](https://www.figma.com/design/nMKdzDIuUbcBXeIcgOt7ue/Digital-Self-Ordering-Menu)
+🔗 [Ver prototipo en Figma]([https://www.figma.com/design/nMKdzDIuUbcBXeIcgOt7ue/Digital-Self-Ordering-Menu](https://www.figma.com/make/nMKdzDIuUbcBXeIcgOt7ue/Digital-Self-Ordering-Menu?fullscreen=1&t=WFl8eO0oymAWEAjE-1))
 
 ## Stack
 
