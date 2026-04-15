@@ -6,7 +6,7 @@ El proyecto nació como una exploración de diseño de interiores para un café 
 
 ## Demo
 
-🔗 [Ver prototipo en Figma]((https://www.figma.com/make/nMKdzDIuUbcBXeIcgOt7ue/Digital-Self-Ordering-Menu?fullscreen=1&t=WFl8eO0oymAWEAjE-1))
+🔗 [Ver prototipo en Figma](https://www.figma.com/make/nMKdzDIuUbcBXeIcgOt7ue/Digital-Self-Ordering-Menu?fullscreen=1&t=WFl8eO0oymAWEAjE-1)
 
 ## Stack
 
